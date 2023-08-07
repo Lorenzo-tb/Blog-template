@@ -15,8 +15,8 @@
     z-index: -1;
 }
 
-#logo-img{
-    width: 50px;
+.logo-img{
+    width: 65px;
     height: auto;
 }
 
@@ -47,7 +47,13 @@
     width: 20vw;
     height: 85vh;
     left: 65%;
-    margin-top: 4%;
+    margin-top: 9%;
     background-color: #fff;
+}
+
+.minha-linha{
+    max-width: 100%;
+    background-color: #fff;
+    height: 1vh;
 }
 
