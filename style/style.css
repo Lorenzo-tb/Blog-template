@@ -44,10 +44,10 @@
 #foto-fixada{
     border-radius: 10px;
     position: absolute;
-    width: 20vw;
-    height: 85vh;
+    width: 25vw;
+    height: 100vh;
     left: 65%;
-    margin-top: 9%;
+    margin-top: 12%;
     background-color: #fff;
 }
 
@@ -57,3 +57,19 @@
     height: 1vh;
 }
 
+#card-principal-img{
+    max-height: 80vh;
+}
+
+.minha-imagem-card{
+    height: 40vh;
+}
+
+.redes-icons{
+    width: 4vw;
+    height: 6vh;
+}
+
+.meu-card{
+    min-height: 90vh;
+}
