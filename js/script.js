@@ -24,6 +24,11 @@ function embaralharArray(a) {
 
 let urlGeral = "https://api-rest-post-diegocandido.herokuapp.com/postagens/";
 
+let divCardPrincipal = document.getElementById("card-principal");
+let divCards3 = document.getElementById("cards-3");
+let divNovidadesGeral = document.getElementById("novidades-geral");
+let divVerMais = document.getElementById("conteudo");
+
 function gerarCardPrincipal(){
 
   let imagem= document.getElementById("card-principal-img");
@@ -53,12 +58,9 @@ function gerarCardPrincipal(){
   });
 }
 
-
 function gerarCards(){
 
-  let divGeral = document.getElementById("cards-3");
-
-  console.log(divGeral);
+  console.log(divCards3);
   /*
       <div class="row mt-5 justify-content-center">
             <div class="col-md-4 col-10 mt-4">
@@ -76,7 +78,6 @@ function gerarCards(){
   fetch(urlGeral)
   .then(resp => resp.json())
   .then(resp =>{
-    resp = embaralharArray(resp);
     console.log(resp);
 
     let rowUm = document.createElement("div");
@@ -104,10 +105,6 @@ function gerarCards(){
       h5.setAttribute("class", "card-title meu-titulo-card");
       h5.textContent = resp[i].title;
 
-      let descricao = document.createElement("p");
-      descricao.setAttribute("class", "card-text minha-descricao-card");
-      descricao.textContent = resp[i].description;
-
       let btn = document.createElement("button");
       btn.setAttribute("class", "btn btn-secondary");
       btn.setAttribute("id", "https://api-rest-post-diegocandido.herokuapp.com/postagem/"+i);
@@ -119,7 +116,6 @@ function gerarCards(){
       divShadow.appendChild(cardBody);
 
       cardBody.appendChild(h5);
-      cardBody.appendChild(descricao);
       cardBody.appendChild(btn);
 
       if(i<3){
@@ -129,12 +125,15 @@ function gerarCards(){
         console.log("teste")
         rowDois.appendChild(espacamento);
       }
+
+      btn.addEventListener("click", gerarInformacoes);
     }
 
-    divGeral.appendChild(rowUm);
-    divGeral.appendChild(rowDois);
+    console.log("teste");
+    divCards3.appendChild(rowUm);
+    divCards3.appendChild(rowDois);
+    
   });
-
 }
 
 function gerarImagemFixa(){
@@ -159,7 +158,6 @@ function gerarCardsNovidades(){
   .then(resp => resp.json())
   .then(resp =>{
 
-    resp = embaralharArray(resp);
     for(let i=0; i<3; i++){
 
       let row = document.createElement("div");
@@ -194,10 +192,6 @@ function gerarCardsNovidades(){
       h5.setAttribute("class", "card-title titulos-novidade");
       h5.textContent = resp[i].title;
 
-      let descricao = document.createElement("p");
-      descricao.setAttribute("class", "card-text descricoes-novidade");
-      descricao.textContent = resp[i].description;
-
       let data = document.createElement("p");
       data.setAttribute("class", "card-text");
       data.textContent = resp[i].postDate;
@@ -206,6 +200,8 @@ function gerarCardsNovidades(){
       btn.setAttribute("class", "btn btn-secondary");
       btn.setAttribute("id", "https://api-rest-post-diegocandido.herokuapp.com/postagem/"+i);
       btn.textContent = "Ver Mais";
+
+      btn.addEventListener("click", gerarInformacoes);
 
       row.appendChild(espacamentoBranco);
       row.appendChild(espacamento);
@@ -222,7 +218,7 @@ function gerarCardsNovidades(){
       colMd8.appendChild(cardBody);
 
       cardBody.appendChild(h5);
-      cardBody.appendChild(descricao);
+
       cardBody.appendChild(data);
       cardBody.appendChild(btn);
 
@@ -230,6 +226,95 @@ function gerarCardsNovidades(){
     }
   })
   
+}
+
+async function gerarInformacoes(btn){
+  let e = await btn;
+  console.log(e.srcElement.id);
+        divCardPrincipal.style.display = "none";
+        divCards3.style.display = "none";
+        divNovidadesGeral.style.display = "none";
+
+        fetch(e.srcElement.id)
+          .then(resp => resp.json())
+          .then(resp =>{
+            console.log(resp);
+            /*
+              <div id="div-img-mais" class="col-md-4">
+                <img src="" alt="img-ver-mais" class="img-fluid rounded-start">
+              </div>
+              <div id="todos-detalhes" class="col-md-8">
+                <div class="card-body">
+                  <h1 id="titulo-mais" class="card-title"></h1>
+                  <h10 id="descricao-mais" class="card-text"></h10>
+                  <h6 id="data-mais" class="card-text"></h6>
+                  <h6 id="criador-mais" class="card-text"></h6>
+                </div>
+              </div>
+            */
+
+            
+            divVerMais.setAttribute("class", "row g-0 pt-5")
+
+            let divImg = document.createElement("div");
+            divImg.setAttribute("class", "col-md-3 pb-5 mb-5");
+
+            let imgMais = document.createElement("img");
+            imgMais.setAttribute("class", "img-fluid rounded-start");
+            imgMais.src = "https://api-rest-post-diegocandido.herokuapp.com"+resp.thumbImage;
+
+            let col1 = document.createElement("div");
+            col1.setAttribute("class", "col-md-1");
+            let col1Dois = document.createElement("div");
+            col1Dois.setAttribute("class", "col-md-1");
+
+            let divCardGeral = document.createElement("div");
+            divCardGeral.setAttribute("class", "col-md-6");
+
+            let divCard = document.createElement("div");
+            divCard.setAttribute("class", "card-body");
+
+            let titulo = document.createElement("h1");
+            titulo.setAttribute("class", "card-title");
+            titulo.textContent = resp.title;
+
+            let descricao = document.createElement("h10");
+            descricao.setAttribute("class", "card-text pb-5");
+            descricao.textContent = resp.description;
+
+            let data = document.createElement("h6");
+            data.setAttribute("class", "card-text");
+            data.textContent = "publidado em: "+resp.postDate;
+
+            let autor = document.createElement("h6");
+            autor.setAttribute("class", "card-text");
+            autor.textContent = resp.profileName;
+
+            let btnVoltar = document.createElement("button");
+            btnVoltar.setAttribute("class", "btn btn-secondary");
+            btnVoltar.textContent = "Voltar";
+
+            divImg.appendChild(imgMais);
+
+            divCardGeral.appendChild(divCard);
+            divCard.appendChild(titulo);
+            divCard.appendChild(descricao);
+            divCard.appendChild(data);
+            divCard.appendChild(autor);
+            divCard.appendChild(btnVoltar);
+
+            divVerMais.appendChild(col1);
+            divVerMais.appendChild(divImg);
+            divVerMais.appendChild(col1Dois);
+            divVerMais.appendChild(divCardGeral);
+
+            btnVoltar.onclick = (e) =>{
+              divVerMais.innerHTML = "";
+              divCardPrincipal.style.display = "block";
+              divCards3.style.display = "block";
+              divNovidadesGeral.style.display = "block";
+            }
+          })
 }
 
 gerarCardPrincipal();
